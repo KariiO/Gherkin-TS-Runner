@@ -1,0 +1,42 @@
+<idea-plugin>
+  <id>com.buczkowski.gherkintsrunner</id>
+  <name>Gherkin TS Runner</name>
+  <version>1.0</version>
+  <vendor email="buczkowski.korneliusz@gmail.com">Korneliusz Buczkowski</vendor>
+
+  <description><![CDATA[
+      Since there is no easy way to run Feature/Scenario that solution come with help.<br>
+      This plugin after open or modification of file with .feature extension add icons in icons area which allow to run either Scenario or Feature.<br><br>
+      Settings have to be filled for proper work of this plugin.<br><br>
+      <a href="https://github.com/KariiO/Gherkin-TS-Runner">GitHub Repository</a>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Change notes will be probably on the github.
+    ]]>
+  </change-notes>
+    <depends>com.intellij.modules.lang</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <projectConfigurable
+            groupId="tools"
+            displayName="Gherkin TS Runner"
+            id="preferences.SingleFileExecutionConfigurable"
+            instance="com.buczkowski.gherkintsrunner.settings.GherkinConfigurable" />
+    <projectService
+            serviceInterface="com.buczkowski.gherkintsrunner.settings.Config"
+            serviceImplementation="com.buczkowski.gherkintsrunner.settings.Config"/>
+  </extensions>
+
+
+  <idea-version since-build="145.0"/>
+
+  <application-components>
+
+    <component>
+      <implementation-class>com.buczkowski.gherkintsrunner.MainComponent</implementation-class>
+    </component>
+  </application-components>
+
+
+
+</idea-plugin>

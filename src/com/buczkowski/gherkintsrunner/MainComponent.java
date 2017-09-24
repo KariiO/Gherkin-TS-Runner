@@ -1,5 +1,9 @@
 package com.buczkowski.gherkintsrunner;
 
+import com.buczkowski.gherkintsrunner.settings.Config;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
@@ -21,6 +25,19 @@ public class MainComponent implements ApplicationComponent {
         ProjectManager.getInstance().addProjectManagerListener(new ProjectManagerListener() {
             @Override
             public void projectOpened(Project project) {
+                Config config = Config.getInstance(project);
+
+                if(config == null) {
+                    return;
+                }
+
+                if(!config.isConfigFilled()) {
+                    Notifications.Bus.notify(
+                            new Notification("Settings Error", "Gherkin TS Runner", "Settings have to be filled.", NotificationType.WARNING)
+                    );
+                    return;
+                }
+
                 connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new GherkinFileEditorManagerListener(project));
             }
         });

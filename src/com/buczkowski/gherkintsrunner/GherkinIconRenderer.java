@@ -7,11 +7,11 @@ import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.ColoredProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -95,12 +95,7 @@ public class GherkinIconRenderer extends GutterIconRenderer {
         try {
             Config config = Config.getInstance(project);
 
-            if(config == null) {
-                return;
-            }
-
-            if(!config.isConfigFilled()) {
-                PluginManager.getLogger().warn("Gherkin TS Runner require to fill every setting to work properly!");
+            if (config == null) {
                 return;
             }
 
@@ -108,7 +103,7 @@ public class GherkinIconRenderer extends GutterIconRenderer {
             commandLine.setExePath(config.getProtractorCmdPath());
             commandLine.setWorkDirectory(project.getBasePath());
             commandLine.addParameter(config.getProtractorConfigJsPath());
-            commandLine.addParameter("--specs=" + config.getFeaturesDir() + "/" + fileName + (icon == SCENARIO_ICON ? ":" + (line + 1) : ""));
+            commandLine.addParameter("--specs=" + config.getFeaturesDirPath() + "/" + fileName + (icon == SCENARIO_ICON ? ":" + (line + 1) : ""));
 
             Process p = commandLine.createProcess();
 
@@ -124,25 +119,18 @@ public class GherkinIconRenderer extends GutterIconRenderer {
                 view.attachToProcess(handler);
 
                 ToolWindow window = manager.getToolWindow(id);
+                Icon cucumberIcon = IconLoader.findIcon("/resources/icons/cucumber.png");
 
                 if (window == null) {
-
                     window = manager.registerToolWindow(id, true, ToolWindowAnchor.BOTTOM);
-
-                    ContentFactory cf = window.getContentManager().getFactory();
-                    Content c = cf.createContent(view.getComponent(), "Run 1", true);
-
-                    window.getContentManager().addContent(c);
-                } else {
-                    ContentFactory cf = window.getContentManager().getFactory();
-                    Content c = cf.createContent(view.getComponent(), "Run " + (window.getContentManager().getContentCount() + 1), true);
-
-                    window.getContentManager().addContent(c);
-
+                    window.setIcon(cucumberIcon);
                 }
+
+                ContentFactory cf = window.getContentManager().getFactory();
+                Content c = cf.createContent(view.getComponent(), "Run " + (window.getContentManager().getContentCount() + 1), true);
+
+                window.getContentManager().addContent(c);
             }
-
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

@@ -19,12 +19,6 @@ public class GherkinIconUtils {
         this.fileName = fileName;
     }
 
-    /**
-     * When file is being edited we don't want to hold old run icons anymore.
-     * All icons which match GherkinIconRenderer instance will be removed.
-     *
-     * @param rootEditor Editor instance passed from FileEditorManagerListener
-     */
     public void removeGherkinRunIcons(Editor rootEditor) {
         RangeHighlighter[] highlighters = rootEditor.getMarkupModel().getAllHighlighters();
         for (RangeHighlighter highlighter : highlighters) {
@@ -35,15 +29,6 @@ public class GherkinIconUtils {
         }
     }
 
-    /**
-     * When file is being edited it will scan all lines and add run icon if regex match.
-     * AllIcons.RunConfigurations.TestState.Run - Scenario Run Icon
-     * AllIcons.RunConfigurations.TestState.Run_run - Feature Run Icon
-     *
-     * @param rootDocument Document instance from DocumentEvent
-     * @param rootEditor Editor instance passed from FileEditorManagerListener
-     * @throws Exception throws whenever feature or scenario regex is empty
-     */
     public void generateGherkinRunIcons(Document rootDocument, Editor rootEditor) {
         for (int i = 0; i < rootDocument.getLineCount(); i++) {
             int startOffset = rootDocument.getLineStartOffset(i);

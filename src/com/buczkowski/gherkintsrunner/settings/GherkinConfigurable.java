@@ -40,7 +40,7 @@ public class GherkinConfigurable implements SearchableConfigurable {
     @Nls
     @Override
     public String getDisplayName() {
-        return "Test name";
+        return "Gherkin TS Runner Settings";
     }
 
     @Override

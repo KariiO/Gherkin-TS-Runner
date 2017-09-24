@@ -10,14 +10,11 @@ import org.jetbrains.annotations.Nullable;
 
 @State(name="Gherkin TS Runner", storages = {@Storage("GherkinTSRunner.xml")})
 public class Config implements PersistentStateComponent<Config> {
-    static final String DEFAULT_SCENARIO_REGEX = "Scenario:([a-zA-Z ]+)$";
-    static final String DEFAULT_FEATURE_REGEX = "Feature:([a-zA-Z ]+)$";
-
     public String scenarioRegex;
     public String featureRegex;
     public String protractorCmdPath;
     public String protractorConfigJsPath;
-    public String featuresDir;
+    public String featuresDirPath;
 
     @Nullable
     @Override
@@ -27,7 +24,6 @@ public class Config implements PersistentStateComponent<Config> {
 
     @Override
     public void loadState(Config gherkinConfig) {
-        // System.out.println("loadState");
         XmlSerializerUtil.copyBean(gherkinConfig, this);
     }
 
@@ -37,11 +33,11 @@ public class Config implements PersistentStateComponent<Config> {
     }
 
     public boolean isConfigFilled() {
-        return !scenarioRegex.isEmpty()
-                && !featureRegex.isEmpty()
-                && !protractorCmdPath.isEmpty()
-                && !protractorConfigJsPath.isEmpty()
-                && !featuresDir.isEmpty();
+        return (scenarioRegex != null && !scenarioRegex.isEmpty())
+                && (featureRegex != null && !featureRegex.isEmpty())
+                && (protractorCmdPath != null && !protractorCmdPath.isEmpty())
+                && (protractorConfigJsPath != null && !protractorConfigJsPath.isEmpty())
+                && (featuresDirPath != null && !featuresDirPath.isEmpty());
     }
 
     public String getScenarioRegex() {
@@ -60,8 +56,8 @@ public class Config implements PersistentStateComponent<Config> {
         return protractorConfigJsPath;
     }
 
-    public String getFeaturesDir() {
-        return featuresDir;
+    public String getFeaturesDirPath() {
+        return featuresDirPath;
     }
 
     public void setScenarioRegex(String scenarioRegex) {
@@ -80,7 +76,7 @@ public class Config implements PersistentStateComponent<Config> {
         this.protractorConfigJsPath = protractorConfigJsPath;
     }
 
-    public void setFeaturesDir(String featuresDir) {
-        this.featuresDir = featuresDir;
+    public void setFeaturesDirPath(String featuresDirPath) {
+        this.featuresDirPath = featuresDirPath;
     }
 }

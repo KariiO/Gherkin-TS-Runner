@@ -2,7 +2,6 @@ package com.buczkowski.gherkintsrunner;
 
 import com.buczkowski.gherkintsrunner.settings.Config;
 import com.buczkowski.gherkintsrunner.settings.GherkinDocumentListener;
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
@@ -20,17 +19,11 @@ public class GherkinFileEditorManagerListener implements FileEditorManagerListen
     public static String FEATURE_REGEX;
     List<VirtualFile> gherkinFiles = new ArrayList<>();
     List<VirtualFile> openedGherkinFiles = new ArrayList<>();
-    private Config config;
 
     public GherkinFileEditorManagerListener(Project project) {
-        config = Config.getInstance(project);
+        Config config = Config.getInstance(project);
 
         if(config == null) {
-            return;
-        }
-
-        if(!config.isConfigFilled()) {
-            PluginManager.getLogger().warn("Gherkin TS Runner require to fill every setting to work properly!");
             return;
         }
 
@@ -39,10 +32,6 @@ public class GherkinFileEditorManagerListener implements FileEditorManagerListen
     }
 
     public void selectionChanged(@NotNull FileEditorManagerEvent event) {
-        if(!config.isConfigFilled()) {
-            PluginManager.getLogger().warn("Gherkin TS Runner require to fill every setting to work properly!");
-            return;
-        }
 
         VirtualFile oldFile = event.getOldFile();
         VirtualFile newFile = event.getNewFile();

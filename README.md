@@ -26,3 +26,6 @@ In every line that match regex for **Scenario** is icon which will execute only 
 
 Output of executing is in **Gherkin Runner** tab which contains bookmarks like **Run1**, **Run2** etc.
 ![Output](https://i.imgur.com/e5jtEcw.png)
+
+In the end it will run protractor in command line like:<br/>
+protractor full_path_to_protractor_config_js --specs=full_path_to_feature_file(when running certain scenario it will add line when it starts like ":12")

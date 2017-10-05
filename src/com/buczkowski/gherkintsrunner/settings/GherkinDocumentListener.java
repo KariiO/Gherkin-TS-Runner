@@ -32,4 +32,8 @@ public class GherkinDocumentListener implements DocumentListener {
             System.out.print(e.getMessage());
         }
     }
+
+    public String getFileName() {
+        return fileName;
+    }
 }

@@ -68,7 +68,6 @@ public class GherkinIconRenderer extends GutterIconRenderer {
         return new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent e) {
-                // System.out.println("Clicked Run Icon in line " + (line + 1));
                 callProtractor();
             }
         };
@@ -91,6 +90,22 @@ public class GherkinIconRenderer extends GutterIconRenderer {
         line = i;
     }
 
+    private GeneralCommandLine getProtractorRunCommand(@NotNull Config config) {
+        GeneralCommandLine commandLine = new GeneralCommandLine();
+        commandLine.setExePath(config.getProtractorCmdPath());
+        commandLine.setWorkDirectory(project.getBasePath());
+        commandLine.addParameter(config.getProtractorConfigJsPath());
+
+        StringBuilder specArg = new StringBuilder().append("--specs=").append(config.getFeaturesDirPath()).append("/").append(fileName);
+        if(icon == SCENARIO_ICON) {
+            specArg.append(":").append(line + 1);
+        }
+
+        commandLine.addParameter(specArg.toString());
+
+        return commandLine;
+    }
+
     private void callProtractor() {
         try {
             Config config = Config.getInstance(project);
@@ -99,13 +114,8 @@ public class GherkinIconRenderer extends GutterIconRenderer {
                 return;
             }
 
-            GeneralCommandLine commandLine = new GeneralCommandLine();
-            commandLine.setExePath(config.getProtractorCmdPath());
-            commandLine.setWorkDirectory(project.getBasePath());
-            commandLine.addParameter(config.getProtractorConfigJsPath());
-            commandLine.addParameter("--specs=" + config.getFeaturesDirPath() + "/" + fileName + (icon == SCENARIO_ICON ? ":" + (line + 1) : ""));
-
-            Process p = commandLine.createProcess();
+            GeneralCommandLine command = getProtractorRunCommand(config);
+            Process p = command.createProcess();
 
             if (project != null) {
                 ToolWindowManager manager = ToolWindowManager.getInstance(project);
@@ -114,7 +124,7 @@ public class GherkinIconRenderer extends GutterIconRenderer {
                 TextConsoleBuilder builder = factory.createBuilder(project);
                 ConsoleView view = builder.getConsole();
 
-                ColoredProcessHandler handler = new ColoredProcessHandler(p, commandLine.getPreparedCommandLine());
+                ColoredProcessHandler handler = new ColoredProcessHandler(p, command.getPreparedCommandLine());
                 handler.startNotify();
                 view.attachToProcess(handler);
 
